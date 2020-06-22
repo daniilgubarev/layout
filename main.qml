@@ -28,7 +28,7 @@ Window {
         anchors.margins: defaultMargin
         spacing: 10
 
-        Rectangle{
+        Rectangle {
             id: screenRect
             color: "lightgray"
 
@@ -38,6 +38,8 @@ Window {
             Layout.alignment: Qt.AlignCenter
 
             Repeater {
+                id: layoutRepeater
+
                 Layout.fillWidth: true
                 Layout.fillHeight: true
 
@@ -60,8 +62,6 @@ Window {
                 }
             }
         }
-
-        Item { Layout.fillHeight: true }
 
         RowLayout {
             TextField {
@@ -95,7 +95,7 @@ Window {
             }
 
             Button {
-                text: "Set width"
+                text: "Set screen size"
 
                 onClicked: layoutModel.screenSize = Qt.size(widthInput.text, heigthInput.text)
             }
@@ -121,6 +121,44 @@ Window {
                 text: "Set num windows"
 
                 onClicked: layoutModel.setUsersNum(userNumInput.text)
+            }
+        }
+
+        Frame {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+            Layout.minimumHeight: 100
+
+            ListView {
+                model: layoutModel
+                clip: true
+                spacing: 3
+
+                anchors.fill: parent
+
+                delegate: Rectangle {
+                    height: 30
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    color: "lightgray"
+
+                    Row
+                    {
+                        anchors.centerIn: parent
+                        Text { text: "id: " + model.id + "\t"}
+                        Text { text: "rect: " + model.rect.toString() }
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        hoverEnabled: true
+
+                        onEntered: layoutRepeater.itemAt(index).color = "red"
+                        onExited: layoutRepeater.itemAt(index).color = "dodgerblue"
+                    }
+                }
+
+                highlight: Rectangle { color: "lightsteelblue"; radius: 5 }
             }
         }
     }
