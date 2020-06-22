@@ -7,6 +7,7 @@
 class LayoutModel : public QAbstractListModel
 {
 	Q_OBJECT
+	Q_PROPERTY(QSize screenSize READ screenSize WRITE setScreenSize NOTIFY screenSizeChanged)
 
 public:
 	explicit LayoutModel(QObject *parent = nullptr);
@@ -23,6 +24,12 @@ public:
 
 	Q_INVOKABLE void setUsersNum(int num);
 
+	void setScreenSize(const QSize& screen);
+	QSize screenSize() const;
+
+signals:
+	void screenSizeChanged();
+
 private:
 	struct UserWindow
 	{
@@ -31,6 +38,10 @@ private:
 	};
 
 	std::vector<UserWindow> Windows;
+	QSize ScreenSize { 400, 400 };
+	int UserNum { 0 };
+
+	void CalculateLayout();
 };
 
 #endif // LAYOUTMODEL_H

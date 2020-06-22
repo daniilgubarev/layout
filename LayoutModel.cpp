@@ -47,7 +47,28 @@ QHash<int, QByteArray> LayoutModel::roleNames() const
 
 void LayoutModel::setUsersNum(int num)
 {
-	auto rects = CalculateGrid({ 400, 400 }, num, 16.f / 9.f, { 5, 2 }, { 2, 2 }, { 400, 400 });
+	UserNum = num;
+
+	CalculateLayout();
+}
+
+void LayoutModel::setScreenSize(const QSize& screen)
+{
+	ScreenSize = screen;
+
+	emit screenSizeChanged();
+
+	CalculateLayout();
+}
+
+QSize LayoutModel::screenSize() const
+{
+	return ScreenSize;
+}
+
+void LayoutModel::CalculateLayout()
+{
+	auto rects = CalculateGrid(ScreenSize, UserNum, 16.f / 9.f, { 5, 2 }, { 2, 2 }, ScreenSize);
 
 	beginResetModel();
 
